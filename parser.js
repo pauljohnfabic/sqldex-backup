@@ -89,7 +89,7 @@
       hits.push({ at: m.index, ref: ref });
     }
 
-    // An alias target ("update a set ... from re.X a") is resolved through the
+    // An alias target ("update a set ... from tx.X a") is resolved through the
     // FROM/JOIN clause that follows it. The written table is always a main table,
     // so it is backed up even when it sits in a JOIN and joins are switched off.
     function aliasAfter(name, at) {
@@ -110,7 +110,7 @@
       hits.push({ at: m.index, ref: target });
     }
 
-    // Lines that are nothing but a table name, e.g. "ap.apvdirecthdr".
+    // Lines that are nothing but a table name, e.g. "tc.table1".
     // Inside a real SQL script an unqualified bare word is almost always noise
     // (a stray keyword, a proc name), so there it must carry a schema prefix.
     // A paste that is purely a list of names has no SQL at all - accept those bare.

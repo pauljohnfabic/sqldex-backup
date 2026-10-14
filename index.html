@@ -98,10 +98,10 @@
           <button class="btn btn-mini btn-red" id="btnClearIn" type="button">CLEAR</button>
         </span>
       </h2>
-      <textarea id="input" spellcheck="false" placeholder="select * from ap.apvdirecthdr where DOCNO = @apvv
-select * from ap.apvdirectdtl where DOCNO = @apvv
-select * from gl.JrnlEntryLINH where Jrnlbatchno = @apvv
-select * from sg.wfProcess"></textarea>
+      <textarea id="input" spellcheck="false" placeholder="select * from tc.table1 where DOCNO = @doc
+select * from tx.table2 where DOCNO = @doc
+select * from tc.table3 where BATCHNO = @doc
+select * from tx.table4"></textarea>
       <p class="hint">Tip: CTRL+ENTER re-generates. WHERE clauses are dropped on purpose.</p>
     </section>
 

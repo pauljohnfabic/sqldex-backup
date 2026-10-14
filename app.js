@@ -23,10 +23,10 @@
   };
 
   var SAMPLE = [
-    'select * from ap.apvdirecthdr where DOCNO = @apvv',
-    'select * from ap.apvdirectdtl where DOCNO = @apvv',
-    'select * from gl.JrnlEntryLINH where Jrnlbatchno = @apvv',
-    'select * from sg.wfProcess'
+    'select * from tc.table1 where DOCNO = @doc',
+    'select * from tx.table2 where DOCNO = @doc',
+    'select * from tc.table3 where BATCHNO = @doc',
+    'select * from tx.table4'
   ].join('\n');
 
   /* ---------------- storage ---------------- */
