@@ -5,7 +5,9 @@ browser — no server, no install, no network calls.
 
 ## Run it
 
-Double-click `index.html`. That's it.
+Online: **https://pauljohnfabic.github.io/sqldex-backup/**
+
+Or locally: double-click `index.html`. That's it.
 
 (The Press Start 2P / VT323 pixel fonts come from Google Fonts. Offline they fall
 back to a monospace font — everything else still works.)
