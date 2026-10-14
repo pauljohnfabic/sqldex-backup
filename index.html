@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SQLDEX-BACKUP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="scanlines" aria-hidden="true"></div>
+
+<header class="topbar">
+  <svg class="ball" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true">
+    <g fill="#12131a">
+      <rect x="4" y="0" width="4" height="1"/><rect x="2" y="1" width="8" height="1"/>
+      <rect x="1" y="2" width="10" height="2"/><rect x="0" y="4" width="12" height="4"/>
+      <rect x="1" y="8" width="10" height="2"/><rect x="2" y="10" width="8" height="1"/>
+      <rect x="4" y="11" width="4" height="1"/>
+    </g>
+    <g fill="#ef4b4b">
+      <rect x="3" y="1" width="6" height="1"/><rect x="2" y="2" width="8" height="2"/>
+      <rect x="1" y="4" width="10" height="1"/>
+    </g>
+    <g fill="#f4f6ff">
+      <rect x="1" y="7" width="10" height="1"/><rect x="2" y="8" width="8" height="2"/>
+      <rect x="3" y="10" width="6" height="1"/>
+    </g>
+    <rect x="4" y="4" width="4" height="4" fill="#12131a"/>
+    <rect x="5" y="5" width="2" height="2" fill="#f4f6ff"/>
+  </svg>
+  <div class="brand">
+    <h1>SQLDEX-BACKUP</h1>
+    <p>backup script generator &middot; runs 100% offline</p>
+  </div>
+  <div class="badge" id="verBadge">LOCAL v1</div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ CONFIG ============ -->
+  <section class="panel accent-yellow">
+    <h2 class="panel-title">&#9656; CONFIG</h2>
+    <div class="grid-config">
+      <label class="field">
+        <span>BACKUP SCHEMA</span>
+        <input id="schema" type="text" spellcheck="false" placeholder="zbak" autocomplete="off">
+      </label>
+
+      <label class="field">
+        <span>STAMP FORMAT</span>
+        <select id="fmt">
+          <option value="MMDDYYYY_HHMM">MMDDYYYY_HHMM</option>
+          <option value="MMDDYYYY_HHMMSS">MMDDYYYY_HHMMSS</option>
+          <option value="YYYYMMDD_HHMM">YYYYMMDD_HHMM</option>
+          <option value="MMDDYY_HHMM">MMDDYY_HHMM</option>
+          <option value="MMDDYYYY">MMDDYYYY</option>
+          <option value="YYYYMMDD">YYYYMMDD</option>
+        </select>
+      </label>
+
+      <div class="field">
+        <span class="field-head">
+          <label for="stamp">STAMP</label>
+          <label class="chk chk-chip"><input type="checkbox" id="optAuto"><i></i><span>AUTO</span></label>
+        </span>
+        <span class="stamp-row">
+          <input id="stamp" type="text" spellcheck="false" autocomplete="off">
+          <button class="btn btn-mini btn-blue" id="btnNow" type="button" title="Refresh to current date/time">NOW</button>
+        </span>
+      </div>
+
+      <label class="field">
+        <span>KEYWORD</span>
+        <select id="kw">
+          <option value="into">select * INTO ... from ...</option>
+          <option value="from">select * from ... from ... (as typed)</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="toggles">
+      <label class="chk"><input type="checkbox" id="optDedupe"><i></i><span>DE-DUPE TABLES</span></label>
+      <label class="chk"><input type="checkbox" id="optJoins"><i></i><span>INCLUDE JOIN TABLES</span></label>
+      <label class="chk"><input type="checkbox" id="optUpper"><i></i><span>UPPERCASE KEYWORDS</span></label>
+      <label class="chk"><input type="checkbox" id="optNoStamp"><i></i><span>NO TIMESTAMP SUFFIX</span></label>
+    </div>
+  </section>
+
+  <!-- ============ IO ============ -->
+  <div class="io">
+    <section class="panel accent-blue">
+      <h2 class="panel-title">&#9656; PASTE SCRIPT
+        <span class="title-btns">
+          <button class="btn btn-mini btn-grey" id="btnSample" type="button">SAMPLE</button>
+          <button class="btn btn-mini btn-red" id="btnClearIn" type="button">CLEAR</button>
+        </span>
+      </h2>
+      <textarea id="input" spellcheck="false" placeholder="select * from ap.apvdirecthdr where DOCNO = @apvv
+select * from ap.apvdirectdtl where DOCNO = @apvv
+select * from gl.JrnlEntryLINH where Jrnlbatchno = @apvv
+select * from sg.wfProcess"></textarea>
+      <p class="hint">Tip: CTRL+ENTER re-generates. WHERE clauses are dropped on purpose.</p>
+    </section>
+
+    <section class="panel accent-green">
+      <h2 class="panel-title">&#9656; BACKUP SCRIPT
+        <span class="title-btns">
+          <button class="btn btn-mini btn-yellow" id="btnSave" type="button">SAVE</button>
+          <button class="btn btn-mini btn-green" id="btnCopy" type="button">COPY</button>
+        </span>
+      </h2>
+      <textarea id="output" spellcheck="false" readonly placeholder="output lands here..."></textarea>
+      <p class="hint" id="stats">0 tables</p>
+    </section>
+  </div>
+
+  <div id="skipped" class="warn" hidden></div>
+
+  <!-- ============ HISTORY ============ -->
+  <section class="panel accent-purple">
+    <h2 class="panel-title">&#9656; HISTORY
+      <span class="title-btns">
+        <button class="btn btn-mini btn-grey" id="btnExport" type="button">EXPORT</button>
+        <button class="btn btn-mini btn-grey" id="btnImport" type="button">IMPORT</button>
+        <button class="btn btn-mini btn-red" id="btnWipe" type="button">WIPE</button>
+      </span>
+    </h2>
+    <input type="file" id="fileImport" accept="application/json,.json" hidden>
+    <div id="historyList" class="hist-list"></div>
+  </section>
+
+  <footer class="foot">saved in this browser only &middot; localStorage + JSON export</footer>
+</main>
+
+<div id="toast" class="toast" hidden></div>
+<script src="parser.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
