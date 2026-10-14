@@ -24,7 +24,7 @@ console.log('\n-- the exact input from the brief --');
 var brief = [
   'select * from tc.table1 where DOCNO = @doc',
   'select * from tx.table2 where DOCNO = @doc',
-  'select * from tc.table3 where BATCHNO = @doc',
+  'select * from tc.table3 where ID = @doc',
   'select * from tx.table4'
 ].join('\n');
 

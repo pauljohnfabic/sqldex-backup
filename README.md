@@ -19,7 +19,7 @@ In:
 ```sql
 select * from tc.table1 where DOCNO = @apvv
 select * from tx.table2 where DOCNO = @apvv
-select * from tc.table3 where Jrnlbatchno = @apvv
+select * from tc.table3 where ID = @apvv
 if 1<>1
 begin
 select * from tx.table4
