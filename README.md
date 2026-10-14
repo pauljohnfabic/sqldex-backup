@@ -17,22 +17,22 @@ back to a monospace font — everything else still works.)
 In:
 
 ```sql
-select * from xx.table1 where DOCNO = @apvv
-select * from ab.table2 where DOCNO = @apvv
-select * from ab.table3 where Jrnlbatchno = @apvv
+select * from tc.table1 where DOCNO = @apvv
+select * from tx.table2 where DOCNO = @apvv
+select * from tc.table3 where Jrnlbatchno = @apvv
 if 1<>1
 begin
-select * from mod.testtable
+select * from tx.table4
 end
 ```
 
 Out:
 
 ```sql
-SELECT * INTO bup.table1_10012026_1614 FROM xx.table1
-SELECT * INTO bup.table2_10012026_1614 FROM ab.table2
-SELECT * INTO bup.table3_10012026_1614 FROM ab.table3
-SELECT * INTO bup.testtable_10012026_1614 FROM mod.testtable
+SELECT * INTO bup.table1_10012026_1614 FROM tc.table1
+SELECT * INTO bup.table2_10012026_1614 FROM tx.table2
+SELECT * INTO bup.table3_10012026_1614 FROM tc.table3
+SELECT * INTO bup.table4_10012026_1614 FROM tx.table4
 ```
 
 WHERE clauses are dropped on purpose — a backup takes the whole table.
@@ -58,10 +58,10 @@ run to history.
 - `select … from schema.table where …` — one per line or spread over several lines
 - Tables being written to: `update x set …`, `delete [from] x`, `insert [into] x`,
   `merge [into] x`, `truncate table x` — so a fix script made only of UPDATEs works.
-  `update a set … from re.X a` backs up `re.X`, not the alias `a`.
+  `update a set … from tx.X a` backs up `tx.X`, not the alias `a`.
 - `[bracketed].[names with spaces]` and `"quoted"` identifiers
 - Three-part names (`db.schema.table`) — the source keeps the db prefix
-- Unqualified tables (`select * from wfProcess`)
+- Unqualified tables (`select * from table4`)
 - A plain list of table names with no SQL around it, one per line
 - `JOIN`ed tables (when **INCLUDE JOIN TABLES** is ticked)
 
